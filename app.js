@@ -955,7 +955,7 @@ function exportToJSONFile() {
     
     const downloadAnchor = document.createElement("a");
     downloadAnchor.href = url;
-    downloadAnchor.download = `${nameSlug}_aureum_data.json`;
+    downloadAnchor.download = `${nameSlug}_sourav_cv_maker_pro_data.json`;
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     

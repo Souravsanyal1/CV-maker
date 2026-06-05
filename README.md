@@ -1,6 +1,6 @@
-# AUREUM - Luxury Executive CV Builder & ATS Optimizer
+# Sourav CV maker Pro - Luxury Executive CV Builder & ATS Optimizer
 
-Welcome to **Aureum**, a modern, lightweight, client-side web application designed to help executives, engineers, and professionals draft high-scoring, ATS-compatible resumes with a stunning digital layout and print-optimized PDF output.
+Welcome to **Sourav CV maker Pro**, a modern, lightweight, client-side web application designed to help executives, engineers, and professionals draft high-scoring, ATS-compatible resumes with a stunning digital layout and print-optimized PDF output.
 
 ---
 
@@ -58,5 +58,5 @@ To maximize your ATS ranking:
 - **Action-Oriented Achievements**: Start every bullet point with a strong action verb (e.g., *Spearheaded, Orchestrated, Engineered, Pioneered, Optimized*). Avoid passive text like *"Responsible for..."* or *"Duties included..."*.
 - **Quantifiable Results**: Include numbers, percentages, and dollar amounts (e.g., *"scaled organization from 30 to 80+ engineers"*, *"reduced infrastructure overhead by 32%"*, *"managed a capital budget of $12M"*).
 - **Keyword Integration**: Match the exact terminology used in the job description you are applying to. For instance, if the description lists "SOC2 Compliance", include that exact phrase in your skills or experience.
-- **Single-Column Rule**: Never use visual tables or multi-column grids for experience details. Many ATS scanners parse left-to-right, mixing sentences together. Aureum's **ATS Print Mode** forces a strict linear hierarchy.
+- **Single-Column Rule**: Never use visual tables or multi-column grids for experience details. Many ATS scanners parse left-to-right, mixing sentences together. Sourav CV maker Pro's **ATS Print Mode** forces a strict linear hierarchy.
 - **No Graphics**: Avoid inserting icons, charts, rating bars, or logos. They do not parse and can register as scrambled characters in candidate databases.

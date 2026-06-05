@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Executive CV Builder & ATS Optimizer</title>
+    <!-- Google Fonts: Cinzel for high-end luxury headings, Inter for body, Playfair for elegant subtitles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="gold-logo-icon">♦</span>
+                <h1>AUREUM</h1>
+                <p>EXECUTIVE CV & ATS OPTIMIZER</p>
+            </div>
+            <div class="global-actions">
+                <button id="btn-load-sample" class="btn btn-gold-outline" title="Load a professional executive resume template">
+                    <span>Load Executive Sample</span>
+                </button>
+                <button id="btn-clear" class="btn btn-danger-outline" title="Clear all fields">
+                    <span>Clear Data</span>
+                </button>
+                <div class="divider"></div>
+                <button id="btn-export-json" class="btn btn-secondary" title="Export resume data as JSON file">
+                    <span>Export JSON</span>
+                </button>
+                <button id="btn-import-trigger" class="btn btn-secondary" title="Import resume data from JSON file">
+                    <span>Import JSON</span>
+                </button>
+                <input type="file" id="import-file-input" accept=".json" style="display: none;">
+            </div>
+        </header>
+
+        <!-- Main Dashboard Workspace -->
+        <main class="app-workspace">
+            
+            <!-- Left Column: The Editor -->
+            <section class="editor-pane" aria-label="Resume Form Editor">
+                <div class="editor-header">
+                    <h2>Resume Editor</h2>
+                    <span class="badge">Live Syncing</span>
+                </div>
+
+                <div class="accordion-container">
+                    
+                    <!-- Accordion Section: Personal Information -->
+                    <div class="accordion-item active" id="sec-personal">
+                        <button class="accordion-trigger" aria-expanded="true">
+                            <span class="icon">👤</span>
+                            <span class="title">Personal Details</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="form-grid">
+                                <div class="form-group col-span-2">
+                                    <label for="input-fullname">Full Name</label>
+                                    <input type="text" id="input-fullname" placeholder="E.g. Edward V. Sterling" autocomplete="name">
+                                </div>
+                                <div class="form-group col-span-2">
+                                    <label for="input-jobtitle">Professional Title</label>
+                                    <input type="text" id="input-jobtitle" placeholder="E.g. Chief Technology Officer | VP of Product">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-email">Email Address</label>
+                                    <input type="email" id="input-email" placeholder="E.g. edward@sterling.com" autocomplete="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-phone">Phone Number</label>
+                                    <input type="tel" id="input-phone" placeholder="E.g. +1 (555) 019-2834" autocomplete="tel">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-location">Location</label>
+                                    <input type="text" id="input-location" placeholder="E.g. New York, NY (Open to Remote)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-linkedin">LinkedIn URL</label>
+                                    <input type="url" id="input-linkedin" placeholder="E.g. linkedin.com/in/edwardsterling">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-website">Personal Website / Portfolio URL (Optional)</label>
+                                    <input type="url" id="input-website" placeholder="E.g. edwardsterling.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-github">GitHub URL (Optional)</label>
+                                    <input type="url" id="input-github" placeholder="E.g. github.com/edwardsterling">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-photo">Profile Photo (Optional)</label>
+                                    <input type="file" id="input-photo" accept="image/*">
+                                    <span class="input-hint">Professional headshot.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-photo-align">Photo Position</label>
+                                    <select id="input-photo-align">
+                                        <option value="right" selected>Top Right</option>
+                                        <option value="left">Top Left</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-span-2" id="photo-preview-container" style="display: none; align-items: center; gap: 1rem; flex-direction: row; margin-top: 0.25rem;">
+                                    <img id="photo-form-preview" src="" alt="Thumbnail" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--ui-border);">
+                                    <button type="button" id="btn-remove-photo" class="btn btn-danger-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; align-self: auto; width: auto; margin-top: 0;">Remove Photo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Professional Summary -->
+                    <div class="accordion-item" id="sec-summary">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">📝</span>
+                            <span class="title">Professional Summary</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="form-group">
+                                <label for="input-summary">Executive Summary</label>
+                                <span class="input-hint">Write a high-impact overview, or use one of our templates below.</span>
+                                <textarea id="input-summary" rows="6" placeholder="E.g. Visionary and results-driven Chief Technology Officer with over 15 years of experience leading global engineering organizations..."></textarea>
+                                <div class="template-helpers" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                    <span style="font-size: 0.7rem; color: var(--ui-text-muted); width: 100%; display: block; margin-bottom: 0.1rem; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em;">Quick Templates (Click to insert):</span>
+                                    <button type="button" class="btn btn-secondary btn-template" data-template="exec" style="padding: 0.35rem 0.75rem; font-size: 0.7rem; border-radius: 4px; border: 1px solid var(--ui-border);">Executive Leader</button>
+                                    <button type="button" class="btn btn-secondary btn-template" data-template="tech" style="padding: 0.35rem 0.75rem; font-size: 0.7rem; border-radius: 4px; border: 1px solid var(--ui-border);">Technical Professional</button>
+                                    <button type="button" class="btn btn-secondary btn-template" data-template="gen" style="padding: 0.35rem 0.75rem; font-size: 0.7rem; border-radius: 4px; border: 1px solid var(--ui-border);">General / Entry-Level</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Work Experience -->
+                    <div class="accordion-item" id="sec-experience">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">💼</span>
+                            <span class="title">Work Experience</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div id="experience-list" class="dynamic-list">
+                                <!-- Dynamic Work Experience entries go here -->
+                            </div>
+                            <button id="btn-add-experience" class="btn btn-add">
+                                <span class="add-icon">+</span> Add Work Experience
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Education -->
+                    <div class="accordion-item" id="sec-education">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">🎓</span>
+                            <span class="title">Education</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div id="education-list" class="dynamic-list">
+                                <!-- Dynamic Education entries go here -->
+                            </div>
+                            <button id="btn-add-education" class="btn btn-add">
+                                <span class="add-icon">+</span> Add Education
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Key Projects -->
+                    <div class="accordion-item" id="sec-projects">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">🚀</span>
+                            <span class="title">Key Projects</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div id="projects-list" class="dynamic-list">
+                                <!-- Dynamic Project entries go here -->
+                            </div>
+                            <button id="btn-add-project" class="btn btn-add">
+                                <span class="add-icon">+</span> Add Project
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Core Competencies & Skills -->
+                    <div class="accordion-item" id="sec-skills">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">⚡</span>
+                            <span class="title">Core Competencies & Skills</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="form-grid">
+                                <div class="form-group col-span-2">
+                                    <label for="input-skills-all">Key Skills & Core Competencies</label>
+                                    <span class="input-hint">List your skills, tools, and expertise, separated by commas.</span>
+                                    <textarea id="input-skills-all" rows="5" placeholder="E.g. Strategic Planning, Global Operations, Cloud Infrastructure (AWS/GCP), CI/CD, Team Mentorship, Agile/Scrum"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Certifications -->
+                    <div class="accordion-item" id="sec-certifications">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">📜</span>
+                            <span class="title">Certifications</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div id="certifications-list" class="dynamic-list">
+                                <!-- Dynamic Certification entries go here -->
+                            </div>
+                            <button id="btn-add-certification" class="btn btn-add">
+                                <span class="add-icon">+</span> Add Certification
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Section: Languages -->
+                    <div class="accordion-item" id="sec-languages">
+                        <button class="accordion-trigger" aria-expanded="false">
+                            <span class="icon">🌐</span>
+                            <span class="title">Languages</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div id="languages-list" class="dynamic-list">
+                                <!-- Dynamic Language entries go here -->
+                            </div>
+                            <button id="btn-add-language" class="btn btn-add">
+                                <span class="add-icon">+</span> Add Language
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            
+            <!-- Right Column: The Live Preview -->
+            <section class="preview-pane" aria-label="Resume Canvas Preview">
+                <!-- Toolbar for preview controls -->
+                <div class="preview-toolbar">
+                    <div class="toolbar-left">
+                        <span class="toolbar-title">View Mode:</span>
+                        <div class="theme-switcher">
+                            <button id="theme-luxury" class="toggle-btn active" title="View screen-optimized luxury digital CV">
+                                👑 Luxury Digital
+                            </button>
+                            <button id="theme-ats" class="toggle-btn" title="View standard print-optimized ATS template">
+                                📄 ATS Print Mode
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-right">
+                        <!-- Zoom Controls -->
+                        <div class="zoom-controls">
+                            <button id="zoom-out" class="zoom-btn" title="Zoom Out">-</button>
+                            <span id="zoom-value">100%</span>
+                            <button id="zoom-in" class="zoom-btn" title="Zoom In">+</button>
+                        </div>
+                        <button id="btn-print" class="btn btn-gold" title="Save resume as PDF via Print Dialog">
+                            <span class="print-icon">🖨️</span> Export ATS PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Page Container (simulates standard paper dimensions) -->
+                <div class="canvas-viewport">
+                    <div id="resume-canvas" class="resume-paper theme-luxury-dark">
+                        <!-- RENDERED BY JAVASCRIPT -->
+                    </div>
+                </div>
+                
+                <div class="preview-footer-tip">
+                    <p>💡 <strong>Recruiter Tip:</strong> ATS scanners prefer clean, single-column text layouts. Use "ATS Print Mode" when exporting to PDF for submitting to online job boards.</p>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

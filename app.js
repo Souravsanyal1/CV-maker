@@ -253,6 +253,17 @@ function initActionButtons() {
     document.getElementById("btn-print").addEventListener("click", () => {
         window.print();
     });
+
+    // ATS Score Analyzer
+    document.getElementById("btn-ats-score").addEventListener("click", () => {
+        openATSAnalyzer();
+    });
+
+    // ATS Modal Close
+    document.getElementById("ats-modal-close").addEventListener("click", closeATSModal);
+    document.getElementById("ats-modal-overlay").addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) closeATSModal();
+    });
 }
 
 // ==========================================================================
@@ -1025,3 +1036,502 @@ window.addEventListener("afterprint", () => {
         canvas.style.removeProperty("--print-scale");
     }
 });
+
+// ==========================================================================
+// ATS Score Analyzer & Job Match Suggestion Engine
+// ==========================================================================
+
+// Action verbs commonly expected by ATS systems
+const ACTION_VERBS = [
+    "led", "managed", "developed", "designed", "implemented", "created",
+    "built", "launched", "engineered", "optimized", "improved", "increased",
+    "reduced", "achieved", "delivered", "established", "spearheaded",
+    "coordinated", "streamlined", "automated", "mentored", "directed",
+    "analyzed", "integrated", "architected", "transformed", "scaled",
+    "negotiated", "collaborated", "executed", "maintained", "supervised",
+    "trained", "resolved", "initiated", "facilitated", "generated",
+    "published", "deployed", "configured", "migrated", "refactored"
+];
+
+// Quantitative metrics patterns (ATS love numbers)
+const METRICS_PATTERNS = [
+    /\d+%/,           // percentages
+    /\$[\d,]+/,       // dollar amounts
+    /\d+[kKmMbB]\+?/, // abbreviated numbers
+    /\d+\+/,          // number+ format
+    /\d+x/i,          // multiplier format
+];
+
+// Comprehensive job profiles database for matching
+const JOB_PROFILES = [
+    {
+        title: "Flutter App Developer",
+        keywords: ["flutter", "dart", "mobile", "ios", "android", "widget", "bloc", "provider", "getx", "riverpod", "firebase", "play store", "app store", "cross-platform", "ui/ux"],
+        category: "Mobile Development",
+        icon: "📱"
+    },
+    {
+        title: "Mobile Application Developer",
+        keywords: ["mobile", "ios", "android", "react native", "flutter", "swift", "kotlin", "java", "app development", "cross-platform", "native"],
+        category: "Mobile Development",
+        icon: "📲"
+    },
+    {
+        title: "Frontend Web Developer",
+        keywords: ["html", "css", "javascript", "react", "vue", "angular", "typescript", "next.js", "tailwind", "sass", "webpack", "responsive", "ui", "ux", "frontend", "front-end"],
+        category: "Web Development",
+        icon: "🌐"
+    },
+    {
+        title: "Full Stack Developer",
+        keywords: ["full stack", "fullstack", "node", "express", "react", "vue", "angular", "mongodb", "postgresql", "mysql", "api", "rest", "graphql", "docker", "aws", "backend", "frontend"],
+        category: "Web Development",
+        icon: "⚙️"
+    },
+    {
+        title: "Backend Developer",
+        keywords: ["backend", "back-end", "node", "python", "django", "flask", "java", "spring", "api", "rest", "graphql", "microservices", "database", "sql", "nosql", "aws", "docker"],
+        category: "Web Development",
+        icon: "🔧"
+    },
+    {
+        title: "Software Engineer",
+        keywords: ["software", "engineer", "programming", "algorithms", "data structures", "oop", "design patterns", "git", "ci/cd", "agile", "scrum", "testing", "debugging"],
+        category: "Software Engineering",
+        icon: "💻"
+    },
+    {
+        title: "DevOps Engineer",
+        keywords: ["devops", "ci/cd", "docker", "kubernetes", "aws", "gcp", "azure", "terraform", "ansible", "jenkins", "github actions", "monitoring", "linux", "automation", "infrastructure"],
+        category: "Infrastructure",
+        icon: "🚀"
+    },
+    {
+        title: "Data Scientist",
+        keywords: ["data science", "machine learning", "python", "pandas", "numpy", "scikit-learn", "tensorflow", "pytorch", "statistics", "deep learning", "nlp", "data analysis", "jupyter"],
+        category: "Data & AI",
+        icon: "📊"
+    },
+    {
+        title: "Data Analyst",
+        keywords: ["data analysis", "sql", "excel", "tableau", "power bi", "python", "r", "statistics", "reporting", "visualization", "etl", "data", "analytics"],
+        category: "Data & AI",
+        icon: "📈"
+    },
+    {
+        title: "UI/UX Designer",
+        keywords: ["ui", "ux", "design", "figma", "sketch", "adobe xd", "wireframe", "prototype", "user research", "usability", "interaction design", "visual design", "design system"],
+        category: "Design",
+        icon: "🎨"
+    },
+    {
+        title: "Cloud Solutions Architect",
+        keywords: ["cloud", "aws", "azure", "gcp", "architecture", "microservices", "serverless", "lambda", "s3", "ec2", "terraform", "solutions", "infrastructure"],
+        category: "Cloud & Infrastructure",
+        icon: "☁️"
+    },
+    {
+        title: "Cybersecurity Analyst",
+        keywords: ["security", "cybersecurity", "penetration testing", "vulnerability", "firewall", "siem", "encryption", "compliance", "incident response", "network security"],
+        category: "Security",
+        icon: "🔒"
+    },
+    {
+        title: "Project Manager (Tech)",
+        keywords: ["project management", "agile", "scrum", "kanban", "jira", "leadership", "team management", "stakeholder", "budget", "planning", "risk management", "pmp"],
+        category: "Management",
+        icon: "📋"
+    },
+    {
+        title: "QA / Test Engineer",
+        keywords: ["testing", "qa", "quality assurance", "automation", "selenium", "cypress", "jest", "junit", "test plan", "bug", "regression", "performance testing", "manual testing"],
+        category: "Quality Assurance",
+        icon: "✅"
+    },
+    {
+        title: "Machine Learning Engineer",
+        keywords: ["machine learning", "deep learning", "tensorflow", "pytorch", "neural network", "nlp", "computer vision", "mlops", "model", "training", "ai", "artificial intelligence"],
+        category: "Data & AI",
+        icon: "🤖"
+    },
+    {
+        title: "Database Administrator",
+        keywords: ["database", "sql", "mysql", "postgresql", "mongodb", "oracle", "redis", "dba", "backup", "replication", "performance tuning", "indexing"],
+        category: "Database",
+        icon: "🗄️"
+    },
+    {
+        title: "Technical Writer",
+        keywords: ["documentation", "technical writing", "api documentation", "markdown", "content", "writing", "communication", "user guide", "knowledge base"],
+        category: "Content",
+        icon: "✍️"
+    },
+    {
+        title: "Embedded Systems Engineer",
+        keywords: ["embedded", "firmware", "c", "c++", "rtos", "microcontroller", "iot", "hardware", "arm", "arduino", "raspberry pi", "pcb"],
+        category: "Hardware/IoT",
+        icon: "🔌"
+    },
+    {
+        title: "Game Developer",
+        keywords: ["game", "unity", "unreal", "c#", "c++", "3d", "2d", "animation", "shader", "physics", "game design", "opengl", "directx"],
+        category: "Game Development",
+        icon: "🎮"
+    },
+    {
+        title: "Blockchain Developer",
+        keywords: ["blockchain", "solidity", "ethereum", "smart contract", "web3", "defi", "nft", "cryptocurrency", "decentralized", "dapp"],
+        category: "Blockchain",
+        icon: "⛓️"
+    },
+    {
+        title: "Digital Marketing Specialist",
+        keywords: ["marketing", "seo", "sem", "google ads", "social media", "content marketing", "analytics", "campaign", "email marketing", "growth"],
+        category: "Marketing",
+        icon: "📢"
+    },
+    {
+        title: "Product Manager",
+        keywords: ["product management", "roadmap", "user stories", "stakeholder", "strategy", "analytics", "a/b testing", "market research", "prm", "agile"],
+        category: "Product",
+        icon: "🎯"
+    },
+    {
+        title: "System Administrator",
+        keywords: ["system admin", "linux", "windows server", "networking", "active directory", "dns", "dhcp", "vpn", "backup", "monitoring", "troubleshooting"],
+        category: "IT Operations",
+        icon: "🖥️"
+    },
+    {
+        title: "Network Engineer",
+        keywords: ["network", "cisco", "routing", "switching", "tcp/ip", "firewall", "lan", "wan", "vpn", "ccna", "ccnp", "network security"],
+        category: "Networking",
+        icon: "🌍"
+    }
+];
+
+
+function openATSAnalyzer() {
+    const result = calculateATSScore();
+    const jobs = getJobSuggestions();
+    renderATSModal(result, jobs);
+    document.getElementById("ats-modal-overlay").classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeATSModal() {
+    document.getElementById("ats-modal-overlay").classList.remove("active");
+    document.body.style.overflow = "";
+}
+
+// ---- ATS Score Calculator ----
+function calculateATSScore() {
+    const checks = [];
+    let totalScore = 0;
+    const suggestions = [];
+
+    // Helper: get all text content from resume
+    const allText = [
+        resumeData.fullname, resumeData.jobtitle, resumeData.summary, resumeData.skills,
+        ...resumeData.workExperience.map(w => `${w.title} ${w.company} ${w.details}`),
+        ...resumeData.education.map(e => `${e.degree} ${e.school} ${e.details}`),
+        ...resumeData.projects.map(p => `${p.name} ${p.role} ${p.description}`),
+        ...resumeData.certifications.map(c => `${c.name} ${c.issuer}`)
+    ].join(" ").toLowerCase();
+
+    // 1. Full Name (5 pts)
+    const hasName = !!(resumeData.fullname && resumeData.fullname.trim().length >= 2);
+    checks.push({ label: "Full Name Present", score: hasName ? 5 : 0, max: 5, pass: hasName });
+    totalScore += hasName ? 5 : 0;
+    if (!hasName) suggestions.push("Add your full professional name.");
+
+    // 2. Professional Title (5 pts)
+    const hasTitle = !!(resumeData.jobtitle && resumeData.jobtitle.trim().length >= 3);
+    checks.push({ label: "Professional Title", score: hasTitle ? 5 : 0, max: 5, pass: hasTitle });
+    totalScore += hasTitle ? 5 : 0;
+    if (!hasTitle) suggestions.push("Add a clear professional title (e.g. 'Flutter Developer').");
+
+    // 3. Email (5 pts)
+    const hasEmail = !!(resumeData.email && resumeData.email.trim().includes("@"));
+    checks.push({ label: "Email Address", score: hasEmail ? 5 : 0, max: 5, pass: hasEmail });
+    totalScore += hasEmail ? 5 : 0;
+    if (!hasEmail) suggestions.push("Include a professional email address.");
+
+    // 4. Phone (5 pts)
+    const hasPhone = !!(resumeData.phone && resumeData.phone.trim().length >= 5);
+    checks.push({ label: "Phone Number", score: hasPhone ? 5 : 0, max: 5, pass: hasPhone });
+    totalScore += hasPhone ? 5 : 0;
+    if (!hasPhone) suggestions.push("Add your phone number for recruiter contact.");
+
+    // 5. Location (3 pts)
+    const hasLocation = !!(resumeData.location && resumeData.location.trim().length >= 3);
+    checks.push({ label: "Location Info", score: hasLocation ? 3 : 0, max: 3, pass: hasLocation });
+    totalScore += hasLocation ? 3 : 0;
+    if (!hasLocation) suggestions.push("Mention your city/location or 'Open to Remote'.");
+
+    // 6. LinkedIn (4 pts)
+    const hasLinkedin = !!(resumeData.linkedin && resumeData.linkedin.trim().length >= 5);
+    checks.push({ label: "LinkedIn Profile", score: hasLinkedin ? 4 : 0, max: 4, pass: hasLinkedin });
+    totalScore += hasLinkedin ? 4 : 0;
+    if (!hasLinkedin) suggestions.push("Add your LinkedIn profile URL.");
+
+    // 7. Professional Summary (10 pts)
+    const summaryWords = resumeData.summary ? resumeData.summary.trim().split(/\s+/).length : 0;
+    let summaryScore = 0;
+    if (summaryWords >= 40) summaryScore = 10;
+    else if (summaryWords >= 20) summaryScore = 6;
+    else if (summaryWords >= 5) summaryScore = 3;
+    checks.push({ label: "Professional Summary", score: summaryScore, max: 10, pass: summaryScore >= 6 });
+    totalScore += summaryScore;
+    if (summaryScore < 10) suggestions.push("Write a professional summary with at least 40-60 words highlighting key achievements.");
+
+    // 8. Work Experience Exists (10 pts)
+    const expCount = resumeData.workExperience.length;
+    let expScore = 0;
+    if (expCount >= 2) expScore = 10;
+    else if (expCount === 1) expScore = 7;
+    checks.push({ label: "Work Experience Entries", score: expScore, max: 10, pass: expScore >= 7 });
+    totalScore += expScore;
+    if (expScore < 10) suggestions.push("Add at least 2 relevant work experience entries.");
+
+    // 9. Bullet Points / Details in Experience (8 pts)
+    let totalBullets = 0;
+    resumeData.workExperience.forEach(w => {
+        if (w.details) {
+            totalBullets += w.details.split("\n").filter(l => l.trim().length > 0).length;
+        }
+    });
+    let bulletScore = 0;
+    if (totalBullets >= 6) bulletScore = 8;
+    else if (totalBullets >= 3) bulletScore = 5;
+    else if (totalBullets >= 1) bulletScore = 2;
+    checks.push({ label: "Achievement Bullet Points", score: bulletScore, max: 8, pass: bulletScore >= 5 });
+    totalScore += bulletScore;
+    if (bulletScore < 8) suggestions.push("Add 3-5 achievement bullet points per job with metrics and action verbs.");
+
+    // 10. Action Verbs Used (7 pts)
+    let actionVerbCount = 0;
+    ACTION_VERBS.forEach(verb => {
+        if (allText.includes(verb)) actionVerbCount++;
+    });
+    let actionScore = 0;
+    if (actionVerbCount >= 8) actionScore = 7;
+    else if (actionVerbCount >= 5) actionScore = 5;
+    else if (actionVerbCount >= 2) actionScore = 3;
+    checks.push({ label: "Action Verbs Usage", score: actionScore, max: 7, pass: actionScore >= 5 });
+    totalScore += actionScore;
+    if (actionScore < 7) suggestions.push("Use strong action verbs like 'Led', 'Developed', 'Optimized', 'Engineered', 'Deployed'.");
+
+    // 11. Quantified Metrics (5 pts)
+    let metricsFound = 0;
+    METRICS_PATTERNS.forEach(pattern => {
+        const matches = allText.match(new RegExp(pattern.source, "gi"));
+        if (matches) metricsFound += matches.length;
+    });
+    let metricsScore = 0;
+    if (metricsFound >= 3) metricsScore = 5;
+    else if (metricsFound >= 1) metricsScore = 3;
+    checks.push({ label: "Quantified Metrics (Numbers/%%)", score: metricsScore, max: 5, pass: metricsScore >= 3 });
+    totalScore += metricsScore;
+    if (metricsScore < 5) suggestions.push("Add quantifiable metrics: '25% revenue increase', 'managed team of 10', '$2M budget'.");
+
+    // 12. Skills Section (10 pts)
+    const skillList = resumeData.skills ? resumeData.skills.split(",").map(s => s.trim()).filter(s => s.length > 0) : [];
+    let skillsScore = 0;
+    if (skillList.length >= 10) skillsScore = 10;
+    else if (skillList.length >= 6) skillsScore = 7;
+    else if (skillList.length >= 3) skillsScore = 4;
+    else if (skillList.length >= 1) skillsScore = 2;
+    checks.push({ label: "Skills Listed (" + skillList.length + " found)", score: skillsScore, max: 10, pass: skillsScore >= 7 });
+    totalScore += skillsScore;
+    if (skillsScore < 10) suggestions.push("List at least 10+ relevant technical and soft skills.");
+
+    // 13. Education (8 pts)
+    const eduCount = resumeData.education.length;
+    let eduScore = 0;
+    if (eduCount >= 1) eduScore = 8;
+    checks.push({ label: "Education Section", score: eduScore, max: 8, pass: eduScore >= 8 });
+    totalScore += eduScore;
+    if (eduScore < 8) suggestions.push("Add your education history (degree, university, year).");
+
+    // 14. Projects Section (5 pts)
+    const projCount = resumeData.projects.length;
+    let projScore = 0;
+    if (projCount >= 2) projScore = 5;
+    else if (projCount === 1) projScore = 3;
+    checks.push({ label: "Key Projects", score: projScore, max: 5, pass: projScore >= 3 });
+    totalScore += projScore;
+    if (projScore < 5) suggestions.push("Add at least 2 key projects with descriptions and your role.");
+
+    // 15. Certifications (5 pts)
+    const certCount = resumeData.certifications.length;
+    let certScore = 0;
+    if (certCount >= 2) certScore = 5;
+    else if (certCount === 1) certScore = 3;
+    checks.push({ label: "Certifications", score: certScore, max: 5, pass: certScore >= 3 });
+    totalScore += certScore;
+    if (certScore < 3) suggestions.push("Add relevant certifications (online courses, professional certs).");
+
+    // 16. Languages (2 pts)
+    const langCount = resumeData.languages.length;
+    let langScore = 0;
+    if (langCount >= 1) langScore = 2;
+    checks.push({ label: "Languages Listed", score: langScore, max: 2, pass: langScore >= 2 });
+    totalScore += langScore;
+
+    // 17. GitHub / Portfolio Link (3 pts)
+    const hasGithubOrPortfolio = !!(resumeData.github && resumeData.github.trim()) || !!(resumeData.website && resumeData.website.trim());
+    checks.push({ label: "GitHub / Portfolio Link", score: hasGithubOrPortfolio ? 3 : 0, max: 3, pass: hasGithubOrPortfolio });
+    totalScore += hasGithubOrPortfolio ? 3 : 0;
+    if (!hasGithubOrPortfolio) suggestions.push("Add a GitHub profile or portfolio link to showcase your work.");
+
+    // Determine verdict
+    let verdict = "";
+    let verdictClass = "";
+    if (totalScore >= 85) { verdict = "🏆 Excellent! Highly ATS-Optimized"; verdictClass = "excellent"; }
+    else if (totalScore >= 70) { verdict = "✅ Good - Ready for Submission"; verdictClass = "good"; }
+    else if (totalScore >= 50) { verdict = "⚠️ Fair - Needs Improvement"; verdictClass = "fair"; }
+    else { verdict = "❌ Weak - Significant Work Needed"; verdictClass = "weak"; }
+
+    return { totalScore, checks, suggestions, verdict, verdictClass };
+}
+
+// ---- Job Suggestion Engine ----
+function getJobSuggestions() {
+    // Build a unified keyword pool from resume data
+    const allText = [
+        resumeData.jobtitle || "",
+        resumeData.summary || "",
+        resumeData.skills || "",
+        ...resumeData.workExperience.map(w => `${w.title || ""} ${w.company || ""} ${w.details || ""}`),
+        ...resumeData.projects.map(p => `${p.name || ""} ${p.role || ""} ${p.description || ""}`),
+        ...resumeData.education.map(e => `${e.degree || ""} ${e.details || ""}`),
+        ...resumeData.certifications.map(c => `${c.name || ""} ${c.issuer || ""}`)
+    ].join(" ").toLowerCase();
+
+    if (allText.trim().length < 10) return [];
+
+    const scored = JOB_PROFILES.map(profile => {
+        let matchCount = 0;
+        let matchedKeywords = [];
+        profile.keywords.forEach(kw => {
+            if (allText.includes(kw.toLowerCase())) {
+                matchCount++;
+                matchedKeywords.push(kw);
+            }
+        });
+        const matchPercent = Math.round((matchCount / profile.keywords.length) * 100);
+        return {
+            ...profile,
+            matchCount,
+            matchedKeywords,
+            matchPercent
+        };
+    });
+
+    // Filter (at least 2 keyword matches) and sort by match percentage
+    return scored
+        .filter(j => j.matchCount >= 2)
+        .sort((a, b) => b.matchPercent - a.matchPercent)
+        .slice(0, 8); // Top 8 matches
+}
+
+// ---- Modal Renderer ----
+function renderATSModal(result, jobs) {
+    // --- Score Ring Animation ---
+    const scoreNum = document.getElementById("ats-score-number");
+    const ringProgress = document.getElementById("ats-ring-progress");
+    const circumference = 2 * Math.PI * 52;
+    ringProgress.style.strokeDasharray = circumference;
+    ringProgress.style.strokeDashoffset = circumference;
+
+    // Set ring color based on score
+    let ringColor = "#ef4444"; // red
+    if (result.totalScore >= 85) ringColor = "#10b981";
+    else if (result.totalScore >= 70) ringColor = "#3b82f6";
+    else if (result.totalScore >= 50) ringColor = "#f59e0b";
+    ringProgress.style.stroke = ringColor;
+
+    // Animate score number and ring
+    let currentScore = 0;
+    const animDuration = 1200;
+    const startTime = performance.now();
+    function animateScore(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / animDuration, 1);
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        currentScore = Math.round(eased * result.totalScore);
+        scoreNum.textContent = currentScore;
+        const offset = circumference - (eased * result.totalScore / 100) * circumference;
+        ringProgress.style.strokeDashoffset = offset;
+        if (progress < 1) requestAnimationFrame(animateScore);
+    }
+    requestAnimationFrame(animateScore);
+
+    // Verdict
+    const verdictEl = document.getElementById("ats-score-verdict");
+    verdictEl.textContent = result.verdict;
+    verdictEl.className = "ats-score-verdict " + result.verdictClass;
+
+    // Summary
+    const passCount = result.checks.filter(c => c.pass).length;
+    document.getElementById("ats-score-summary").textContent =
+        `${passCount} of ${result.checks.length} criteria passed | Total Score: ${result.totalScore}/100`;
+
+    // --- Breakdown ---
+    const breakdownList = document.getElementById("ats-breakdown-list");
+    breakdownList.innerHTML = result.checks.map(check => `
+        <div class="ats-breakdown-item ${check.pass ? 'pass' : 'fail'}">
+            <span class="ats-check-icon">${check.pass ? '✅' : '❌'}</span>
+            <span class="ats-check-label">${check.label}</span>
+            <span class="ats-check-score">${check.score} / ${check.max}</span>
+            <div class="ats-check-bar">
+                <div class="ats-check-bar-fill" style="width: ${(check.score / check.max) * 100}%"></div>
+            </div>
+        </div>
+    `).join("");
+
+    // --- Suggestions ---
+    const sugList = document.getElementById("ats-suggestions-list");
+    if (result.suggestions.length === 0) {
+        sugList.innerHTML = `<div class="ats-suggestion-item perfect">🎉 Your resume is well-optimized! No critical improvements needed.</div>`;
+    } else {
+        sugList.innerHTML = result.suggestions.map(s => `
+            <div class="ats-suggestion-item">
+                <span class="sug-icon">💡</span>
+                <span>${s}</span>
+            </div>
+        `).join("");
+    }
+
+    // --- Job Suggestions ---
+    const jobsList = document.getElementById("ats-jobs-list");
+    if (jobs.length === 0) {
+        jobsList.innerHTML = `<div class="ats-no-jobs">📝 Add more skills and work experience to get job match suggestions.</div>`;
+    } else {
+        jobsList.innerHTML = jobs.map(job => {
+            let matchClass = "low";
+            if (job.matchPercent >= 60) matchClass = "high";
+            else if (job.matchPercent >= 35) matchClass = "medium";
+            return `
+                <div class="ats-job-card">
+                    <div class="ats-job-header">
+                        <span class="ats-job-icon">${job.icon}</span>
+                        <div class="ats-job-info">
+                            <span class="ats-job-title">${job.title}</span>
+                            <span class="ats-job-category">${job.category}</span>
+                        </div>
+                        <div class="ats-job-match ${matchClass}">
+                            <span class="ats-job-match-num">${job.matchPercent}%</span>
+                            <span class="ats-job-match-label">Match</span>
+                        </div>
+                    </div>
+                    <div class="ats-job-keywords">
+                        ${job.matchedKeywords.map(kw => `<span class="ats-kw-tag">${kw}</span>`).join("")}
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+}

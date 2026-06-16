@@ -260,6 +260,9 @@
                             <span id="zoom-value">100%</span>
                             <button id="zoom-in" class="zoom-btn" title="Zoom In">+</button>
                         </div>
+                        <button id="btn-ats-score" class="btn btn-ats-analyze" title="Analyze ATS Score & Get Job Suggestions">
+                            <span>🎯</span> ATS Score & Jobs
+                        </button>
                         <button id="btn-print" class="btn btn-gold" title="Save resume as PDF via Print Dialog">
                             <span class="print-icon">🖨️</span> Export ATS PDF
                         </button>
@@ -281,6 +284,52 @@
         </main>
     </div>
     
+    <!-- ATS Score Analyzer Modal -->
+    <div id="ats-modal-overlay" class="ats-modal-overlay">
+        <div class="ats-modal">
+            <div class="ats-modal-header">
+                <h2>🎯 ATS Score & Job Match Analysis</h2>
+                <button id="ats-modal-close" class="ats-modal-close-btn" title="Close">&times;</button>
+            </div>
+            <div class="ats-modal-body">
+                <!-- Score Ring -->
+                <div class="ats-score-section">
+                    <div class="ats-score-ring-container">
+                        <svg class="ats-score-ring" viewBox="0 0 120 120">
+                            <circle class="ats-ring-bg" cx="60" cy="60" r="52" />
+                            <circle id="ats-ring-progress" class="ats-ring-progress" cx="60" cy="60" r="52" />
+                        </svg>
+                        <div class="ats-score-value">
+                            <span id="ats-score-number">0</span>
+                            <span class="ats-score-label">/ 100</span>
+                        </div>
+                    </div>
+                    <div id="ats-score-verdict" class="ats-score-verdict">Analyzing...</div>
+                    <div id="ats-score-summary" class="ats-score-summary"></div>
+                </div>
+
+                <!-- Breakdown -->
+                <div class="ats-breakdown-section">
+                    <h3>📊 Score Breakdown</h3>
+                    <div id="ats-breakdown-list" class="ats-breakdown-list"></div>
+                </div>
+
+                <!-- Suggestions -->
+                <div class="ats-suggestions-section">
+                    <h3>💡 Improvement Tips</h3>
+                    <div id="ats-suggestions-list" class="ats-suggestions-list"></div>
+                </div>
+
+                <!-- Job Match -->
+                <div class="ats-jobs-section">
+                    <h3>💼 Recommended Job Matches</h3>
+                    <p class="ats-jobs-subtitle">Based on your skills and experience, these jobs are a strong fit for you:</p>
+                    <div id="ats-jobs-list" class="ats-jobs-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>

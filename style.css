@@ -664,6 +664,10 @@ body {
     box-sizing: border-box;
 }
 
+.resume-content-wrapper {
+    width: 100%;
+}
+
 .preview-footer-tip {
     background-color: var(--ui-pane-bg);
     border-top: 1px solid var(--ui-border);
@@ -1321,6 +1325,12 @@ body {
         transform: scale(1) !important; /* Force zoom reset during print */
         transform-origin: top left !important;
         page-break-after: avoid;
+    }
+    
+    .resume-content-wrapper {
+        width: calc(100% / var(--print-scale, 1)) !important;
+        transform: scale(var(--print-scale, 1)) !important;
+        transform-origin: top left !important;
     }
 
     /* Print template force adjustments: force white bg and dark text */

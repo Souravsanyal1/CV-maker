@@ -918,13 +918,15 @@ function renderPreview() {
 
     // Build the final complete HTML
     canvas.innerHTML = `
-        ${headerHTML}
-        ${summaryHTML}
-        ${experienceHTML}
-        ${skillsHTML}
-        ${projectsHTML}
-        ${educationHTML}
-        ${extraGridHTML}
+        <div class="resume-content-wrapper">
+            ${headerHTML}
+            ${summaryHTML}
+            ${experienceHTML}
+            ${skillsHTML}
+            ${projectsHTML}
+            ${educationHTML}
+            ${extraGridHTML}
+        </div>
     `;
     
     // Auto-adjust scale sizing rules on update
@@ -985,3 +987,41 @@ function importFromJSONFile(file) {
     };
     reader.readAsText(file);
 }
+
+// Dynamic print scaling to fit exactly on 1 page (A4 size)
+function adjustPrintScale() {
+    const canvas = document.getElementById("resume-canvas");
+    if (!canvas) return;
+    const wrapper = canvas.querySelector(".resume-content-wrapper");
+    if (!wrapper) return;
+
+    // Reset scale to 1 to measure natural scrollHeight
+    canvas.style.removeProperty("--print-scale");
+    
+    // Measure natural height of the wrapper
+    const contentHeight = wrapper.scrollHeight;
+    
+    // Target height for A4 page printable area:
+    // A4 is 297mm height. Padding is 15mm top + 15mm bottom = 30mm.
+    // Remaining vertical space is 267mm.
+    // Convert 267mm to pixels using standard 96 DPI scale (1mm = 3.779527559px)
+    const targetHeightPx = 267 * 3.779527559; // ~1009.13px
+    
+    if (contentHeight > targetHeightPx) {
+        const scale = targetHeightPx / contentHeight;
+        // Apply the scale factor as a CSS variable (with a floor of 0.3 just in case)
+        const safeScale = Math.max(0.3, scale);
+        canvas.style.setProperty("--print-scale", safeScale.toString());
+    } else {
+        canvas.style.setProperty("--print-scale", "1");
+    }
+}
+
+// Attach listeners to handle print triggers
+window.addEventListener("beforeprint", adjustPrintScale);
+window.addEventListener("afterprint", () => {
+    const canvas = document.getElementById("resume-canvas");
+    if (canvas) {
+        canvas.style.removeProperty("--print-scale");
+    }
+});

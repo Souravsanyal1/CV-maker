@@ -1277,13 +1277,13 @@ body {
    PRINT MEDIA STYLES (Triggers during PDF Export / System Printing)
    ========================================================================== */
 @media print {
-    /* Hide all elements that are part of the UI shell */
+    /* Hide all elements that are part of the UI shell and force exactly 1 page height */
     html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
-        height: auto !important;
-        min-height: 0 !important;
-        overflow: visible !important;
+        height: 100% !important;
+        min-height: 100% !important;
+        overflow: hidden !important;
     }
     
     /* Hide layout structures that shouldn't print */
@@ -1311,20 +1311,23 @@ body {
         box-shadow: none !important;
     }
     
-    /* Resume Paper print specifications */
+    /* Resume Paper print specifications - forced to exactly 1 A4 page height and clipped to prevent 2nd page creation */
     .resume-paper {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
-        height: auto !important;
-        min-height: 0 !important;
+        height: 297mm !important; /* Force exact A4 page height */
+        min-height: 297mm !important;
+        box-sizing: border-box !important;
         padding: 15mm !important; /* Standard printable margins */
         margin: 0 !important;
+        overflow: hidden !important; /* Hide layout overflow from triggering new pages */
         box-shadow: none !important;
         border: none !important;
         transform: scale(1) !important; /* Force zoom reset during print */
         transform-origin: top left !important;
-        page-break-after: avoid;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
     }
     
     .resume-content-wrapper {

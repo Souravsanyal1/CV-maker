@@ -1004,8 +1004,8 @@ function adjustPrintScale() {
     // Target height for A4 page printable area:
     // A4 is 297mm height. Padding is 15mm top + 15mm bottom = 30mm.
     // Remaining vertical space is 267mm.
-    // Convert 267mm to pixels using standard 96 DPI scale (1mm = 3.779527559px)
-    const targetHeightPx = 267 * 3.779527559; // ~1009.13px
+    // We target 264mm (997.8px) for a safety margin of 3mm to ensure absolutely no 2nd page is created.
+    const targetHeightPx = 264 * 3.779527559; // ~997.8px
     
     if (contentHeight > targetHeightPx) {
         const scale = targetHeightPx / contentHeight;

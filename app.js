@@ -95,17 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
     initThemeSwitcher();
     initActionButtons();
     initFormBindings();
+    initMobileTabs();
     
-    // Load existing data from LocalStorage or seed with sample data
+    // Load existing data from LocalStorage
     const savedData = localStorage.getItem("aureum_resume_data");
     if (savedData) {
         try {
             resumeData = JSON.parse(savedData);
             
-            // Automatically upgrade placeholder data to the user's details if the name is Edward
-            if (resumeData.fullname === "Edward V. Sterling") {
-                resumeData = JSON.parse(JSON.stringify(sampleData));
-                localStorage.setItem("aureum_resume_data", JSON.stringify(resumeData));
+            // If the saved data has the default sample name, clear it to start fresh
+            if (resumeData.fullname === "Edward V. Sterling" || resumeData.fullname === "Sourav sanyal Joy") {
+                clearAllData();
             } else {
                 // Migration: Convert old object skills schema to flat string if needed
                 if (resumeData.skills && typeof resumeData.skills === "object") {
@@ -115,17 +115,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (resumeData.skills.soft) parts.push(resumeData.skills.soft);
                     resumeData.skills = parts.join(", ");
                 }
+                populateForm();
+                renderPreview();
             }
-            
-            populateForm();
-            renderPreview();
         } catch (e) {
             console.error("Error parsing saved local storage data:", e);
-            loadSampleData();
+            clearAllData();
         }
     } else {
-        // Auto-seed on first visit so the layout isn't blank
-        loadSampleData();
+        // Start completely empty on first visit
+        clearAllData();
     }
 });
 
@@ -157,7 +156,7 @@ function initAccordions() {
     });
 }
 
-// Zoom Viewport Controls
+// Zoom Viewport Controls with Auto-Scaling for Mobile
 function initZoomControls() {
     const zoomInBtn = document.getElementById("zoom-in");
     const zoomOutBtn = document.getElementById("zoom-out");
@@ -165,15 +164,25 @@ function initZoomControls() {
     const canvas = document.getElementById("resume-canvas");
 
     const updateZoom = () => {
-        zoomValSpan.textContent = `${Math.round(zoomFactor * 100)}%`;
-        canvas.style.transform = `scale(${zoomFactor})`;
+        const viewport = document.querySelector(".canvas-viewport");
+        if (!viewport || !canvas) return;
+
+        let activeScale = zoomFactor;
+        if (window.innerWidth <= 768) {
+            // Auto scale to fit the viewport width with a small padding
+            const viewportWidth = viewport.clientWidth;
+            const canvasWidth = canvas.offsetWidth || 794;
+            activeScale = Math.min(zoomFactor, (viewportWidth - 16) / canvasWidth);
+        }
+
+        zoomValSpan.textContent = `${Math.round(activeScale * 100)}%`;
+        canvas.style.transform = `scale(${activeScale})`;
         
         // Adjust the viewport height/margins to accommodate scaling
-        const scaledHeight = canvas.offsetHeight * zoomFactor;
-        const viewport = document.querySelector(".canvas-viewport");
+        const scaledHeight = canvas.offsetHeight * activeScale;
         
         // Keep a minimum height equivalent to A4 layout scale
-        viewport.style.minHeight = `${scaledHeight + 80}px`;
+        viewport.style.minHeight = `${scaledHeight + 40}px`;
     };
 
     zoomInBtn.addEventListener("click", () => {
@@ -1534,4 +1543,35 @@ function renderATSModal(result, jobs) {
             `;
         }).join("");
     }
+}
+
+// Mobile Workspace Tab Switcher
+function initMobileTabs() {
+    const tabsContainer = document.getElementById("mobile-workspace-tabs");
+    const workspace = document.querySelector(".app-workspace");
+    if (!tabsContainer || !workspace) return;
+    
+    // Set initial class
+    workspace.classList.add("tab-editor");
+    
+    const buttons = tabsContainer.querySelectorAll(".tab-btn");
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            buttons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            const targetTab = btn.getAttribute("data-tab");
+            if (targetTab === "preview") {
+                workspace.classList.remove("tab-editor");
+                workspace.classList.add("tab-preview");
+                // Trigger a resize event to recalculate canvas scaling when preview is shown
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 50);
+            } else {
+                workspace.classList.remove("tab-preview");
+                workspace.classList.add("tab-editor");
+            }
+        });
+    });
 }

@@ -1577,10 +1577,10 @@ body {
         font-weight: bold !important;
     }
     
-    /* Page setup for A4 printing */
+    /* Page setup for A4 printing - margin 0 suppresses browser default header (date/title) and footer (URL/page numbers) */
     @page {
         size: A4 portrait;
-        margin: 10mm;
+        margin: 0;
     }
 }
 

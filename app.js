@@ -169,20 +169,22 @@ function initZoomControls() {
 
         let activeScale = zoomFactor;
         if (window.innerWidth <= 768) {
-            // Auto scale to fit the viewport width with a small padding
-            const viewportWidth = viewport.clientWidth;
+            // Auto scale to fit the Android/mobile screen width cleanly
+            const viewportWidth = viewport.clientWidth || window.innerWidth;
             const canvasWidth = canvas.offsetWidth || 794;
             activeScale = Math.min(zoomFactor, (viewportWidth - 16) / canvasWidth);
         }
 
         zoomValSpan.textContent = `${Math.round(activeScale * 100)}%`;
         canvas.style.transform = `scale(${activeScale})`;
+        canvas.style.transformOrigin = "top center";
         
-        // Adjust the viewport height/margins to accommodate scaling
-        const scaledHeight = canvas.offsetHeight * activeScale;
+        // Calculate vertical scale height difference to eliminate dead bottom space and allow smooth end-to-end scrolling
+        const unscaledHeight = canvas.offsetHeight;
+        const scaledHeight = unscaledHeight * activeScale;
+        const heightDiff = unscaledHeight - scaledHeight;
         
-        // Keep a minimum height equivalent to A4 layout scale
-        viewport.style.minHeight = `${scaledHeight + 40}px`;
+        canvas.style.marginBottom = `-${heightDiff - 30}px`;
     };
 
     zoomInBtn.addEventListener("click", () => {
@@ -1609,6 +1611,8 @@ function initMobileTabs() {
                 // Trigger a resize event to recalculate canvas scaling when preview is shown
                 setTimeout(() => {
                     window.dispatchEvent(new Event('resize'));
+                    const viewport = document.querySelector(".canvas-viewport");
+                    if (viewport) viewport.scrollTop = 0;
                 }, 50);
             } else {
                 workspace.classList.remove("tab-preview");

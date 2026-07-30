@@ -115,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (resumeData.skills.soft) parts.push(resumeData.skills.soft);
                     resumeData.skills = parts.join(", ");
                 }
+                // Clear photo to avoid print issues
+                resumeData.photo = "";
                 populateForm();
                 renderPreview();
             }
@@ -263,6 +265,22 @@ function initActionButtons() {
         window.print();
     });
 
+    window.addEventListener("beforeprint", () => {
+        const workspace = document.querySelector(".app-workspace");
+        if (workspace) {
+            workspace.classList.remove("tab-editor");
+            workspace.classList.add("tab-preview");
+        }
+        const canvas = document.getElementById("resume-canvas");
+        if (canvas) {
+            canvas.style.transform = "none";
+        }
+    });
+
+    window.addEventListener("afterprint", () => {
+        window.dispatchEvent(new Event("resize"));
+    });
+
     // ATS Score Analyzer
     document.getElementById("btn-ats-score").addEventListener("click", () => {
         openATSAnalyzer();
@@ -308,12 +326,30 @@ function initFormBindings() {
     photoInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Validate file type
+            if (!file.type.match("image.*")) {
+                alert("Please upload a valid image file (e.g., PNG, JPG, JPEG).");
+                photoInput.value = "";
+                return;
+            }
+            
             const reader = new FileReader();
             reader.onload = (event) => {
-                resumeData.photo = event.target.result;
-                document.getElementById("photo-form-preview").src = event.target.result;
-                document.getElementById("photo-preview-container").style.display = "flex";
-                syncState();
+                try {
+                    resumeData.photo = event.target.result;
+                    document.getElementById("photo-form-preview").src = event.target.result;
+                    document.getElementById("photo-preview-container").style.display = "flex";
+                    syncState();
+                } catch (error) {
+                    console.error("Error processing photo:", error);
+                    alert("Failed to process the photo. Please try again.");
+                    photoInput.value = "";
+                }
+            };
+            reader.onerror = () => {
+                console.error("Error reading file:", reader.error);
+                alert("Failed to read the photo. Please try again.");
+                photoInput.value = "";
             };
             reader.readAsDataURL(file);
         }
@@ -1008,41 +1044,49 @@ function importFromJSONFile(file) {
     reader.readAsText(file);
 }
 
-// Dynamic print scaling to fit exactly on 1 page (A4 size)
+// Force the resume to fit on one A4 page
 function adjustPrintScale() {
     const canvas = document.getElementById("resume-canvas");
     if (!canvas) return;
     const wrapper = canvas.querySelector(".resume-content-wrapper");
     if (!wrapper) return;
 
-    // Reset scale to 1 to measure natural scrollHeight
-    canvas.style.removeProperty("--print-scale");
+    // Reset styles before measuring
+    wrapper.style.transform = "none";
+    wrapper.style.width = "100%";
     
-    // Measure natural height of the wrapper
+    // Measure the natural height of the content
     const contentHeight = wrapper.scrollHeight;
     
-    // Target height for A4 page printable area:
-    // A4 is 297mm height. Padding is 15mm top + 15mm bottom = 30mm.
-    // Remaining vertical space is 267mm.
-    // We target 264mm (997.8px) for a safety margin of 3mm to ensure absolutely no 2nd page is created.
+    // Target height for A4 page (264mm with 3mm safety margin)
     const targetHeightPx = 264 * 3.779527559; // ~997.8px
     
+    // Force scaling to fit the content on one page
     if (contentHeight > targetHeightPx) {
         const scale = targetHeightPx / contentHeight;
-        // Apply the scale factor as a CSS variable (with a floor of 0.3 just in case)
-        const safeScale = Math.max(0.3, scale);
-        canvas.style.setProperty("--print-scale", safeScale.toString());
-    } else {
-        canvas.style.setProperty("--print-scale", "1");
+        wrapper.style.transform = `scale(${scale})`;
+        wrapper.style.transformOrigin = "top left";
+        wrapper.style.width = `${100 / scale}%`;
     }
 }
 
-// Attach listeners to handle print triggers
-window.addEventListener("beforeprint", adjustPrintScale);
-window.addEventListener("afterprint", () => {
+// Force ATS theme and scaling during print
+window.addEventListener("beforeprint", () => {
     const canvas = document.getElementById("resume-canvas");
     if (canvas) {
-        canvas.style.removeProperty("--print-scale");
+        // Force ATS theme for print
+        canvas.className = "resume-paper theme-ats-light";
+        // Force scaling to fit on one page
+        adjustPrintScale();
+    }
+});
+
+window.addEventListener("afterprint", () => {
+    // Restore the original theme after print
+    const canvas = document.getElementById("resume-canvas");
+    if (canvas) {
+        const isAtsTheme = document.getElementById("theme-ats").classList.contains("active");
+        canvas.className = isAtsTheme ? "resume-paper theme-ats-light" : "resume-paper theme-luxury-dark";
     }
 });
 

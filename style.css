@@ -1214,7 +1214,7 @@ body {
     box-shadow: 0 4px 12px rgba(197, 160, 89, 0.2);
 }
 
-@media (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
     .app-workspace {
         flex-direction: column;
         overflow-y: auto;
@@ -1246,7 +1246,7 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .app-workspace {
         flex-direction: column;
         overflow: hidden;
@@ -1403,29 +1403,47 @@ body {
    PRINT MEDIA STYLES (Triggers during PDF Export / System Printing)
    ========================================================================== */
 @media print {
-    /* Hide all elements that are part of the UI shell and force exactly 1 page height */
+    /* Reset background and enable standard document flow */
     html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
-        height: 100% !important;
-        min-height: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Hide all non-printable UI elements with maximum specificity */
+    html body .editor-pane,
+    html body .app-workspace .editor-pane,
+    html body .app-workspace.tab-editor .editor-pane,
+    html body .app-workspace.tab-preview .editor-pane,
+    html body .app-header,
+    html body .preview-toolbar,
+    html body .preview-footer-tip,
+    html body .workspace-tabs,
+    html body #mobile-workspace-tabs,
+    html body .ats-modal-overlay {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
         overflow: hidden !important;
     }
     
-    /* Hide layout structures that shouldn't print */
-    .app-header,
-    .editor-pane,
-    .preview-toolbar,
-    .preview-footer-tip {
-        display: none !important;
-    }
-    
-    /* Ensure containers are visible, non-scrollable, and occupy full page width */
-    .app-container,
-    .app-workspace,
-    .preview-pane,
-    .canvas-viewport {
+    /* Force preview container to be visible and unconstrained regardless of active screen tabs */
+    html body .app-container,
+    html body .app-workspace,
+    html body .preview-pane,
+    html body .app-workspace .preview-pane,
+    html body .app-workspace.tab-editor .preview-pane,
+    html body .app-workspace.tab-preview .preview-pane,
+    html body .canvas-viewport {
         display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
         width: 100% !important;
         height: auto !important;
         min-height: 0 !important;
@@ -1435,46 +1453,65 @@ body {
         background: transparent !important;
         overflow: visible !important;
         box-shadow: none !important;
+        position: static !important;
     }
     
-    /* Resume Paper print specifications - forced to exactly 1 A4 page height and clipped to prevent 2nd page creation */
+    /* Resume paper print dimensions */
     .resume-paper {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
-        height: 297mm !important; /* Force exact A4 page height */
-        min-height: 297mm !important;
+        height: auto !important;
+        min-height: 0 !important;
         box-sizing: border-box !important;
-        padding: 15mm !important; /* Standard printable margins */
-        margin: 0 !important;
-        overflow: hidden !important; /* Hide layout overflow from triggering new pages */
+        padding: 8mm 10mm !important;
+        margin: 0 auto !important;
+        overflow: visible !important;
         box-shadow: none !important;
         border: none !important;
-        transform: scale(1) !important; /* Force zoom reset during print */
-        transform-origin: top left !important;
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
+        transform: none !important;
     }
     
     .resume-content-wrapper {
-        width: calc(100% / var(--print-scale, 1)) !important;
-        transform: scale(var(--print-scale, 1)) !important;
+        width: 100% !important;
         transform-origin: top left !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    /* Prevent split elements across page boundaries */
+    .resume-section,
+    .resume-item,
+    .resume-header,
+    .resume-contact {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    /* Standardize print typography */
+    .resume-paper {
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 10pt !important;
+        line-height: 1.25 !important;
     }
 
-    /* Print template force adjustments: force white bg and dark text */
-    .resume-paper.theme-luxury-dark {
+    /* Force white background and dark text for all themes when printing */
+    .resume-paper.theme-luxury-dark,
+    .resume-paper.theme-ats-light {
         background-color: #ffffff !important;
         color: #1a1a1a !important;
         border: none !important;
     }
     
-    .resume-paper.theme-luxury-dark::before {
-        height: 2px !important; /* Thinner border for print saving */
+    /* Hide user photo in print mode to prevent layout breaking */
+    .resume-photo {
+        display: none !important;
     }
     
-    .theme-luxury-dark .resume-header::after {
-        background-color: #ffffff !important;
+    .resume-paper.theme-luxury-dark::before,
+    .theme-luxury-dark .resume-header::after,
+    .theme-luxury-dark .resume-header::before {
+        display: none !important;
     }
     
     .theme-luxury-dark .resume-name {
@@ -1494,12 +1531,15 @@ body {
         padding: 0 !important;
         border-radius: 0 !important;
         box-shadow: none !important;
+        display: inline !important;
+        text-decoration: none !important;
     }
     
     .theme-luxury-dark .resume-contact-item a {
         color: #444444 !important;
         background: none !important;
         border: none !important;
+        text-decoration: none !important;
     }
     
     .theme-luxury-dark .resume-section-title {
@@ -1530,19 +1570,17 @@ body {
         box-shadow: none !important;
     }
     
-    /* Handle clean page-break constraints to avoid split sentences */
-    .resume-section {
-        page-break-inside: avoid !important;
+    /* ATS theme print adjustments */
+    .theme-ats-light .resume-contact-item:not(:last-child)::after {
+        content: ' | ' !important;
+        color: #888888 !important;
+        font-weight: bold !important;
     }
     
-    .resume-item {
-        page-break-inside: avoid !important;
-    }
-    
-    /* CSS standard page settings */
+    /* Page setup for A4 printing */
     @page {
         size: A4 portrait;
-        margin: 0;
+        margin: 10mm;
     }
 }
 

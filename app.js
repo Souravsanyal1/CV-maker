@@ -179,12 +179,14 @@ function initZoomControls() {
         canvas.style.transform = `scale(${activeScale})`;
         canvas.style.transformOrigin = "top center";
         
-        // Calculate vertical scale height difference to eliminate dead bottom space and allow smooth end-to-end scrolling
-        const unscaledHeight = canvas.offsetHeight;
-        const scaledHeight = unscaledHeight * activeScale;
-        const heightDiff = unscaledHeight - scaledHeight;
-        
-        canvas.style.marginBottom = `-${heightDiff - 30}px`;
+        if (activeScale < 1) {
+            const unscaledHeight = canvas.offsetHeight;
+            const scaledHeight = unscaledHeight * activeScale;
+            const heightDiff = unscaledHeight - scaledHeight;
+            canvas.style.marginBottom = `-${heightDiff - 40}px`;
+        } else {
+            canvas.style.marginBottom = "40px";
+        }
     };
 
     zoomInBtn.addEventListener("click", () => {

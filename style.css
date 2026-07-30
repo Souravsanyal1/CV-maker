@@ -1503,9 +1503,13 @@ body {
         border: none !important;
     }
     
-    /* Hide user photo in print mode to prevent layout breaking */
+    /* User photo print formatting */
     .resume-photo {
-        display: none !important;
+        display: block !important;
+        width: 80px !important;
+        height: 80px !important;
+        object-fit: cover !important;
+        border-radius: 4px !important;
     }
     
     .resume-paper.theme-luxury-dark::before,

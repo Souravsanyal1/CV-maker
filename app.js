@@ -115,8 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (resumeData.skills.soft) parts.push(resumeData.skills.soft);
                     resumeData.skills = parts.join(", ");
                 }
-                // Clear photo to avoid print issues
-                resumeData.photo = "";
                 populateForm();
                 renderPreview();
             }

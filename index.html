@@ -19,8 +19,8 @@
                 <h1>Sourav CV maker Pro</h1>
             </div>
             <div class="global-actions">
-                <button id="btn-load-sample" class="btn btn-gold-outline" title="Load a professional executive resume template">
-                    <span>Load Executive Sample</span>
+                <button id="btn-ai-autofill" class="btn btn-ai-fill" title="Auto-fill complete CV with AI presets or custom job titles">
+                    <span>✨ AI Auto-Fill / Presets</span>
                 </button>
                 <button id="btn-clear" class="btn btn-danger-outline" title="Clear all fields">
                     <span>Clear Data</span>
@@ -289,6 +289,100 @@
         </main>
     </div>
     
+    <!-- AI Auto-Fill / Presets Modal -->
+    <div id="ai-modal-overlay" class="ats-modal-overlay">
+        <div class="ats-modal ai-modal-content">
+            <div class="ats-modal-header">
+                <h2>✨ AI Auto-Fill & Profession Presets</h2>
+                <button id="ai-modal-close" class="ats-modal-close-btn" title="Close">&times;</button>
+            </div>
+            <div class="ats-modal-body">
+                <div class="ai-modal-intro">
+                    <p>Select a pre-built professional profile below, or enter any job title to generate a complete high-impact CV in 1 click!</p>
+                </div>
+
+                <!-- Section 1: Presets Grid -->
+                <div class="ai-presets-section">
+                    <h3>⚡ Pick a Profession Preset (1-Click Fill)</h3>
+                    <div class="ai-presets-grid">
+                        <div class="ai-preset-card" data-preset="flutter">
+                            <div class="preset-icon">📱</div>
+                            <div class="preset-info">
+                                <div class="preset-title">Flutter App Developer</div>
+                                <div class="preset-subtitle">Dart, BLoC/Provider, Firebase, REST APIs, App Store</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+
+                        <div class="ai-preset-card" data-preset="web">
+                            <div class="preset-icon">💻</div>
+                            <div class="preset-info">
+                                <div class="preset-title">Full-Stack Web Developer</div>
+                                <div class="preset-subtitle">React, Next.js, Node.js, Express, MongoDB, AWS</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+
+                        <div class="ai-preset-card" data-preset="data">
+                            <div class="preset-icon">📊</div>
+                            <div class="preset-info">
+                                <div class="preset-title">Data Analyst & Scientist</div>
+                                <div class="preset-subtitle">Python, SQL, Tableau, Pandas, ETL, Machine Learning</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+
+                        <div class="ai-preset-card" data-preset="design">
+                            <div class="preset-icon">🎨</div>
+                            <div class="preset-info">
+                                <div class="preset-title">UI/UX & Product Designer</div>
+                                <div class="preset-subtitle">Figma, User Research, Wireframing, Design Systems</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+
+                        <div class="ai-preset-card" data-preset="exec">
+                            <div class="preset-icon">💼</div>
+                            <div class="preset-info">
+                                <div class="preset-title">Executive CTO / Manager</div>
+                                <div class="preset-subtitle">Leadership, Tech Strategy, Agile, Budget, Operations</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+
+                        <div class="ai-preset-card" data-preset="fresh">
+                            <div class="preset-icon">🎓</div>
+                            <div class="preset-info">
+                                <div class="preset-title">Fresh Graduate / Student</div>
+                                <div class="preset-subtitle">CS Graduate, Internships, Projects, Academic Honors</div>
+                            </div>
+                            <button type="button" class="btn btn-gold btn-preset-apply">Apply Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Custom AI Generator -->
+                <div class="ai-custom-section">
+                    <h3>🚀 Custom AI Profile Generator</h3>
+                    <p class="ai-custom-hint">Enter your target job title and optional name below to auto-fill custom tailored resume details:</p>
+                    <div class="ai-custom-form">
+                        <div class="form-group">
+                            <label for="ai-input-title">Target Job Title</label>
+                            <input type="text" id="ai-input-title" placeholder="E.g. Python Backend Engineer, DevOps Specialist, Marketing Manager...">
+                        </div>
+                        <div class="form-group">
+                            <label for="ai-input-name">Your Full Name (Optional)</label>
+                            <input type="text" id="ai-input-name" placeholder="E.g. Sourav Joy">
+                        </div>
+                        <button type="button" id="btn-ai-generate" class="btn btn-ai-fill btn-ai-generate-action">
+                            <span>✨ AI Generate & Auto-Fill CV</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ATS Score Analyzer Modal -->
     <div id="ats-modal-overlay" class="ats-modal-overlay">
         <div class="ats-modal">

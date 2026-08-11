@@ -83,7 +83,379 @@ const sampleData = {
     ]
 };
 
-// 3. Zoom Factor State
+// 3. AI Profession Presets Dataset Map
+const presetProfiles = {
+    flutter: {
+        fullname: "Sourav Sanyal Joy",
+        jobtitle: "Flutter App Developer",
+        email: "joysanyal1999@gmail.com",
+        phone: "+8801307460389",
+        location: "Gazipur Cadet College Area, Gazipur, Bangladesh",
+        linkedin: "linkedin.com/in/sourav-sanyal-joy/",
+        github: "github.com/Souravsanyal1",
+        website: "",
+        summary: "Dedicated and detail-oriented Flutter App Developer with experience building high-performance, cross-platform mobile applications. Skilled in Dart, Flutter SDK, state management (BLoC/Provider), REST API integration, and modern UI/UX design. Passionate about writing clean, maintainable code, optimizing app performance, and delivering seamless user experiences across iOS and Android.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Freelance / Independent Software Developer",
+                title: "Flutter App Developer",
+                location: "Gazipur, Bangladesh",
+                startDate: "Jan 2022",
+                endDate: "Present",
+                details: "Developed and published custom Flutter applications on Google Play Store and iOS App Store.\nImplemented state management patterns (BLoC, Provider) to optimize application state, decreasing UI rendering overhead by 25%.\nIntegrated RESTful APIs, Firebase services (Authentication, Firestore, Cloud Messaging), and local databases (Hive, SQLite).\nCollaborated with UI/UX designers to implement pixel-perfect, responsive layouts and smooth micro-animations."
+            }
+        ],
+        education: [
+            {
+                degree: "Bachelor of Science",
+                school: "Bangladesh Open University",
+                location: "Gazipur, Bangladesh",
+                gradYear: "Running",
+                details: "Currently pursuing degree studies with a focus on computing and mobile software development."
+            }
+        ],
+        projects: [
+            {
+                name: "multi-system-app",
+                role: "Lead Developer",
+                link: "github.com/Souravsanyal1/multi-system-app",
+                description: "Developed a comprehensive multi-system mobile application using Flutter. Led full development lifecycle including system architecture, UI/UX implementation, API integration, and performance tuning."
+            }
+        ],
+        skills: "Flutter, Dart, Mobile App Development, iOS & Android Development, State Management (Provider, BLoC, GetX), RESTful APIs, Firebase Integration, Git, UI/UX Implementation, API Integration, SQLite, Hive Database, Play Store Publishing, App Performance Optimization",
+        certifications: [
+            {
+                name: "Mobile App Development with Flutter",
+                issuer: "Online Tech Platform",
+                date: "2023"
+            }
+        ],
+        languages: [
+            { language: "Bangla", proficiency: "Native / Bilingual" },
+            { language: "English", proficiency: "Full Professional" }
+        ]
+    },
+    web: {
+        fullname: "Alex R. Mercer",
+        jobtitle: "Full-Stack Web Developer | MERN Stack",
+        email: "alex.mercer@devmail.io",
+        phone: "+1 (555) 382-9102",
+        location: "San Francisco, CA (Open to Remote)",
+        linkedin: "linkedin.com/in/alexmercer-dev",
+        github: "github.com/alexmercer",
+        website: "alexmercer.io",
+        summary: "Versatile Full-Stack Engineer with 4+ years of expertise building responsive, scalable web applications using React, Next.js, Node.js, Express, and MongoDB/PostgreSQL. Skilled in cloud deployment (AWS, Vercel), RESTful APIs, and modern frontend architecture.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Nexus Software Labs",
+                title: "Full-Stack Web Developer",
+                location: "San Francisco, CA",
+                startDate: "Mar 2022",
+                endDate: "Present",
+                details: "Engineered scalable microservices and React web portals serving 100K+ monthly active users.\nReduced server response latency by 35% through Redis caching and PostgreSQL query optimization.\nCollaborated in an Agile team of 8 to deliver CI/CD automated deployments via GitHub Actions and AWS EC2."
+            }
+        ],
+        education: [
+            {
+                degree: "B.S. in Computer Science",
+                school: "University of California, Berkeley",
+                location: "Berkeley, CA",
+                gradYear: "2021",
+                details: "GPA 3.8 / 4.0. Focus on Distributed Systems, Web Architectures, and Database Systems."
+            }
+        ],
+        projects: [
+            {
+                name: "CloudOps Management Dashboard",
+                role: "Lead Full-Stack Architect",
+                link: "github.com/alexmercer/cloud-ops-dash",
+                description: "Developed a real-time server monitoring dashboard using Next.js 14, Node.js, WebSockets, and Chart.js."
+            }
+        ],
+        skills: "JavaScript (ES6+), TypeScript, React, Next.js, Node.js, Express, MongoDB, PostgreSQL, GraphQL, Docker, Tailwind CSS, AWS, Git, CI/CD",
+        certifications: [
+            {
+                name: "AWS Certified Developer – Associate",
+                issuer: "Amazon Web Services",
+                date: "2023"
+            }
+        ],
+        languages: [
+            { language: "English", proficiency: "Native / Bilingual" }
+        ]
+    },
+    data: {
+        fullname: "Sophia L. Chen",
+        jobtitle: "Data Analyst & Business Intelligence Specialist",
+        email: "sophia.chen@analytics.org",
+        phone: "+1 (555) 902-1144",
+        location: "New York, NY",
+        linkedin: "linkedin.com/in/sophiachen-data",
+        github: "github.com/sophiachen",
+        website: "sophiachen.data.io",
+        summary: "Results-driven Data Analyst with expertise in Python, SQL, Tableau, and statistical modeling. Adept at transforming complex datasets into actionable business insights, predictive reports, and automated KPI dashboards. Strong background in ETL data pipelines and executive reporting.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Vanguard Insights Group",
+                title: "Senior Data Analyst",
+                location: "New York, NY",
+                startDate: "Aug 2022",
+                endDate: "Present",
+                details: "Designed automated Tableau dashboards tracking $50M+ in annual revenue channels.\nBuilt automated ETL pipelines using Python (Pandas, PySpark) and SQL, saving 15 hours of manual reporting weekly.\nConducted A/B testing and customer segmentation analysis that boosted campaign conversion rate by 18%."
+            }
+        ],
+        education: [
+            {
+                degree: "M.S. in Business Analytics & Statistics",
+                school: "Columbia University",
+                location: "New York, NY",
+                gradYear: "2022",
+                details: "Focus on Applied Data Mining, Predictive Machine Learning, and Econometrics."
+            }
+        ],
+        projects: [
+            {
+                name: "Customer Churn Prediction Model",
+                role: "Data Scientist",
+                link: "github.com/sophiachen/churn-prediction",
+                description: "Developed a Machine Learning model using Scikit-Learn and XGBoost achieving 92% accuracy in predicting customer churn."
+            }
+        ],
+        skills: "Python (Pandas, NumPy, Scikit-Learn), SQL, Tableau, Power BI, R, PostgreSQL, Snowflake, ETL Pipelines, Machine Learning, A/B Testing, Excel (VBA)",
+        certifications: [
+            {
+                name: "Google Data Analytics Professional Certificate",
+                issuer: "Google",
+                date: "2022"
+            }
+        ],
+        languages: [
+            { language: "English", proficiency: "Native / Bilingual" }
+        ]
+    },
+    design: {
+        fullname: "Maya V. Lin",
+        jobtitle: "Senior UI/UX & Product Designer",
+        email: "maya.lin@designstudio.com",
+        phone: "+1 (555) 741-2099",
+        location: "Seattle, WA",
+        linkedin: "linkedin.com/in/mayalin-design",
+        github: "",
+        website: "mayalin.design",
+        summary: "Creative UI/UX & Product Designer with 5+ years of experience crafting intuitive, user-centered digital products. Specialized in design systems, high-fidelity Figma prototyping, user research, wireframing, and interactive micro-animations.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Lumina Digital Studio",
+                title: "Senior Product Designer",
+                location: "Seattle, WA",
+                startDate: "Jan 2021",
+                endDate: "Present",
+                details: "Led end-to-end product design for a SaaS platform used by over 200,000 active subscribers.\nCreated and maintained a comprehensive Figma design system with 150+ reusable components.\nConducted 50+ user interviews and usability tests to iterate interactive wireframes."
+            }
+        ],
+        education: [
+            {
+                degree: "B.F.A. in Human-Computer Interaction & Graphic Design",
+                school: "Rhode Island School of Design",
+                location: "Providence, RI",
+                gradYear: "2020",
+                details: "Graduated with Honors. Specialized in Digital Interfaces and Interaction Design."
+            }
+        ],
+        projects: [
+            {
+                name: "Fintech Mobile Banking Redesign",
+                role: "Lead UX Designer",
+                link: "mayalin.design/banking-case-study",
+                description: "Redesigned mobile banking experience focused on WCAG accessibility and frictionless transaction flows. Boosted retention by 25%."
+            }
+        ],
+        skills: "Figma, User Research, Wireframing, Interactive Prototyping, Design Systems, Usability Testing, Information Architecture, WCAG Accessibility, Adobe CC",
+        certifications: [
+            {
+                name: "UX Design Professional Certificate",
+                issuer: "Nielsen Norman Group",
+                date: "2022"
+            }
+        ],
+        languages: [
+            { language: "English", proficiency: "Native / Bilingual" }
+        ]
+    },
+    exec: {
+        fullname: "Edward V. Sterling",
+        jobtitle: "Chief Technology Officer | Executive Leader",
+        email: "edward@sterling-exec.com",
+        phone: "+1 (555) 019-2834",
+        location: "New York, NY",
+        linkedin: "linkedin.com/in/edwardsterling-cto",
+        github: "github.com/esterling",
+        website: "edwardsterling.com",
+        summary: "Visionary Executive Leader and CTO with over 15 years of experience leading enterprise software engineering, global operations, and digital transformation. Proven track record of scaling engineering organizations from 20 to 150+ engineers, managing $20M+ technology budgets, and driving 40% annual revenue growth.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Sterling Enterprise Systems",
+                title: "Chief Technology Officer",
+                location: "New York, NY",
+                startDate: "Jan 2018",
+                endDate: "Present",
+                details: "Directed multi-disciplinary tech organization of 120+ engineers across Cloud Infrastructure, AI, and DevOps.\nSpearheaded cloud migration to AWS microservices, reducing global operational expenditure by $3.5M annually.\nDefined multi-year technical roadmap and aligned tech strategy with C-suite executive vision."
+            }
+        ],
+        education: [
+            {
+                degree: "M.B.A. in Executive Management",
+                school: "Harvard Business School",
+                location: "Boston, MA",
+                gradYear: "2015",
+                details: "Executive Leadership Program. Focus on Strategy and Global Tech Operations."
+            }
+        ],
+        projects: [
+            {
+                name: "Global Cloud Transformation",
+                role: "Executive Director",
+                link: "edwardsterling.com/cloud-case-study",
+                description: "Oversee enterprise-wide cloud infrastructure migration for Fortune 500 financial clients with zero downtime."
+            }
+        ],
+        skills: "Executive Leadership, Strategic Planning, Enterprise Architecture, Team Mentorship, Cloud Infrastructure (AWS/GCP), Agile/Scrum, Budget Management, Risk Management",
+        certifications: [
+            {
+                name: "Project Management Professional (PMP)",
+                issuer: "PMI Institute",
+                date: "2016"
+            }
+        ],
+        languages: [
+            { language: "English", proficiency: "Native / Bilingual" }
+        ]
+    },
+    fresh: {
+        fullname: "Tanjil Hasan Rahul",
+        jobtitle: "Junior Software Engineer | CS Graduate",
+        email: "tanjil.rahul@gmail.com",
+        phone: "+880 1800-112233",
+        location: "Dhaka, Bangladesh",
+        linkedin: "linkedin.com/in/tanjil-rahul",
+        github: "github.com/tanjilrahul",
+        website: "tanjilrahul.dev",
+        summary: "Enthusiastic Computer Science Graduate with a strong foundation in object-oriented programming, data structures, algorithms, and web/mobile development. Eager to contribute to team success, learn cutting-edge frameworks, and build impactful software solutions.",
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "SoftTech Bangladesh",
+                title: "Software Engineering Intern",
+                location: "Dhaka, Bangladesh",
+                startDate: "May 2023",
+                endDate: "Nov 2023",
+                details: "Assisted senior developers in building backend REST APIs using Node.js and Express.\nParticipated in daily Scrum standups, bug fixing, and unit test coverage.\nContributed to frontend component development using JavaScript and Bootstrap."
+            }
+        ],
+        education: [
+            {
+                degree: "B.Sc. in Computer Science & Engineering",
+                school: "BRAC University",
+                location: "Dhaka, Bangladesh",
+                gradYear: "2024",
+                details: "CGPA: 3.75 / 4.00. Dean's List Honor. Vice President of Computer Club."
+            }
+        ],
+        projects: [
+            {
+                name: "Student Academic Management System",
+                role: "Team Lead (Capstone Project)",
+                link: "github.com/tanjilrahul/academic-mgmt",
+                description: "Developed a full-stack university student management portal using React, Node.js, and MySQL with grade calculator and course enrollment."
+            }
+        ],
+        skills: "JavaScript, Python, C++, Java, React.js, Node.js, Express, MySQL, Git, Problem Solving, Data Structures & Algorithms, OOP",
+        certifications: [
+            {
+                name: "Complete Web Development Course",
+                issuer: "Programming Platform",
+                date: "2023"
+            }
+        ],
+        languages: [
+            { language: "Bengali", proficiency: "Native / Bilingual" },
+            { language: "English", proficiency: "Full Professional" }
+        ]
+    }
+};
+
+// AI Custom Generator Helper
+function generateCustomProfileData(targetTitle, customName) {
+    const title = targetTitle.trim() || "Software Specialist";
+    const name = customName.trim() || "Sourav Joy";
+    const cleanSlug = name.toLowerCase().replace(/\s+/g, "");
+    
+    return {
+        fullname: name,
+        jobtitle: title,
+        email: `${cleanSlug}@example.com`,
+        phone: "+880 1700-000000",
+        location: "Dhaka, Bangladesh (Open to Remote)",
+        linkedin: `linkedin.com/in/${name.toLowerCase().replace(/\s+/g, "-")}`,
+        github: `github.com/${cleanSlug}`,
+        website: `${cleanSlug}.dev`,
+        summary: `Results-driven ${title} with proven expertise in building high-performance solutions, modern architectures, and scalable systems. Skilled in industry best practices, cross-functional collaboration, problem-solving, and delivering high-quality user-centric outcomes. Focused on continuous innovation and technical excellence.`,
+        photo: "",
+        photoAlign: "right",
+        workExperience: [
+            {
+                company: "Innovative Tech Solutions Ltd.",
+                title: title,
+                location: "Dhaka, Bangladesh",
+                startDate: "Jan 2022",
+                endDate: "Present",
+                details: `Led key technical initiatives as ${title}, driving project execution and performance optimizations.\nStreamlined core workflows and collaborated with cross-functional teams to improve delivery speed by 30%.\nImplemented industry best practices, automated testing, and maintainable clean architecture.`
+            }
+        ],
+        education: [
+            {
+                degree: "B.Sc. in Computer Science & Engineering",
+                school: "Reputed University",
+                location: "Dhaka, Bangladesh",
+                gradYear: "2022",
+                details: "Completed degree coursework with emphasis on software engineering principles and modern computing systems."
+            }
+        ],
+        projects: [
+            {
+                name: `${title.split(" ")[0] || "Core"} Enterprise System`,
+                role: "Lead Developer",
+                link: `github.com/${cleanSlug}/enterprise-system`,
+                description: `Designed and built an end-to-end ${title} solution featuring real-time data processing, responsive UI, modular architecture, and high scalability.`
+            }
+        ],
+        skills: `${title}, System Design, Software Architecture, RESTful APIs, Git, Problem Solving, Agile/Scrum, Team Collaboration, Performance Optimization`,
+        certifications: [
+            {
+                name: `Professional Certificate in ${title}`,
+                issuer: "Global Learning Platform",
+                date: "2023"
+            }
+        ],
+        languages: [
+            { language: "Bengali", proficiency: "Native / Bilingual" },
+            { language: "English", proficiency: "Full Professional" }
+        ]
+    };
+}
+
+// 4. Zoom Factor State
 let zoomFactor = 1.0;
 
 // ==========================================================================
@@ -103,21 +475,16 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             resumeData = JSON.parse(savedData);
             
-            // If the saved data has the default sample name, clear it to start fresh
-            if (resumeData.fullname === "Edward V. Sterling" || resumeData.fullname === "Sourav sanyal Joy") {
-                clearAllData();
-            } else {
-                // Migration: Convert old object skills schema to flat string if needed
-                if (resumeData.skills && typeof resumeData.skills === "object") {
-                    const parts = [];
-                    if (resumeData.skills.core) parts.push(resumeData.skills.core);
-                    if (resumeData.skills.tech) parts.push(resumeData.skills.tech);
-                    if (resumeData.skills.soft) parts.push(resumeData.skills.soft);
-                    resumeData.skills = parts.join(", ");
-                }
-                populateForm();
-                renderPreview();
+            // Migration: Convert old object skills schema to flat string if needed
+            if (resumeData.skills && typeof resumeData.skills === "object") {
+                const parts = [];
+                if (resumeData.skills.core) parts.push(resumeData.skills.core);
+                if (resumeData.skills.tech) parts.push(resumeData.skills.tech);
+                if (resumeData.skills.soft) parts.push(resumeData.skills.soft);
+                resumeData.skills = parts.join(", ");
             }
+            populateForm();
+            renderPreview();
         } catch (e) {
             console.error("Error parsing saved local storage data:", e);
             clearAllData();
@@ -163,30 +530,43 @@ function initZoomControls() {
     const zoomValSpan = document.getElementById("zoom-value");
     const canvas = document.getElementById("resume-canvas");
 
+    // Wrap canvas in a sizer div if not already done
+    let wrapper = document.getElementById("resume-canvas-wrapper");
+    if (!wrapper && canvas) {
+        wrapper = document.createElement("div");
+        wrapper.id = "resume-canvas-wrapper";
+        wrapper.style.cssText = "display:inline-block; position:relative; transform-origin: top center;";
+        canvas.parentNode.insertBefore(wrapper, canvas);
+        wrapper.appendChild(canvas);
+    }
+
     const updateZoom = () => {
         const viewport = document.querySelector(".canvas-viewport");
-        if (!viewport || !canvas) return;
+        if (!viewport || !canvas || !wrapper) return;
 
         let activeScale = zoomFactor;
         if (window.innerWidth <= 768) {
-            // Auto scale to fit the Android/mobile screen width cleanly
             const viewportWidth = viewport.clientWidth || window.innerWidth;
             const canvasWidth = canvas.offsetWidth || 794;
-            activeScale = Math.min(zoomFactor, (viewportWidth - 16) / canvasWidth);
+            activeScale = Math.min(zoomFactor, (viewportWidth - 32) / canvasWidth);
         }
 
         zoomValSpan.textContent = `${Math.round(activeScale * 100)}%`;
+
+        // Apply scale to the canvas itself
         canvas.style.transform = `scale(${activeScale})`;
-        canvas.style.transformOrigin = "top center";
-        
-        if (activeScale < 1) {
-            const unscaledHeight = canvas.offsetHeight;
-            const scaledHeight = unscaledHeight * activeScale;
-            const heightDiff = unscaledHeight - scaledHeight;
-            canvas.style.marginBottom = `-${heightDiff - 40}px`;
-        } else {
-            canvas.style.marginBottom = "40px";
-        }
+        canvas.style.transformOrigin = "top left";
+        canvas.style.display = "block";
+
+        // After a microtask, set the wrapper size to match the VISUAL (scaled) size
+        // so the scroll container knows the true scrollable height
+        requestAnimationFrame(() => {
+            const naturalW = canvas.offsetWidth;
+            const naturalH = canvas.offsetHeight;
+            wrapper.style.width = (naturalW * activeScale) + "px";
+            wrapper.style.height = (naturalH * activeScale) + "px";
+            wrapper.style.marginBottom = "40px";
+        });
     };
 
     zoomInBtn.addEventListener("click", () => {
@@ -202,9 +582,12 @@ function initZoomControls() {
             updateZoom();
         }
     });
-    
+
     // Quick recalculation when window resizes
     window.addEventListener("resize", updateZoom);
+
+    // Run once on init
+    updateZoom();
 }
 
 // Theme Template Toggle
@@ -230,12 +613,63 @@ function initThemeSwitcher() {
 
 // Global Toolbar Commands
 function initActionButtons() {
-    // Preset Loader
-    document.getElementById("btn-load-sample").addEventListener("click", () => {
-        if (confirm("This will overwrite your current inputs. Load executive sample data?")) {
-            loadSampleData();
-        }
+    // AI Auto-Fill Modal Open & Close Triggers
+    const aiModalOverlay = document.getElementById("ai-modal-overlay");
+    const aiModalCloseBtn = document.getElementById("ai-modal-close");
+    const btnAiAutoFill = document.getElementById("btn-ai-autofill");
+
+    if (btnAiAutoFill && aiModalOverlay) {
+        btnAiAutoFill.addEventListener("click", () => {
+            aiModalOverlay.classList.add("active");
+        });
+    }
+
+    if (aiModalCloseBtn && aiModalOverlay) {
+        aiModalCloseBtn.addEventListener("click", () => {
+            aiModalOverlay.classList.remove("active");
+        });
+        aiModalOverlay.addEventListener("click", (e) => {
+            if (e.target === aiModalOverlay) {
+                aiModalOverlay.classList.remove("active");
+            }
+        });
+    }
+
+    // Apply Preset Profile Cards (1-Click Fill)
+    const presetCards = document.querySelectorAll(".ai-preset-card");
+    presetCards.forEach(card => {
+        card.addEventListener("click", (e) => {
+            const key = card.getAttribute("data-preset");
+            if (presetProfiles[key]) {
+                if (confirm(`Auto-fill complete CV with the "${presetProfiles[key].jobtitle}" preset?`)) {
+                    resumeData = JSON.parse(JSON.stringify(presetProfiles[key]));
+                    populateForm();
+                    syncState();
+                    if (aiModalOverlay) aiModalOverlay.classList.remove("active");
+                }
+            }
+        });
     });
+
+    // Custom AI Generator Submit Trigger
+    const btnAiGenerate = document.getElementById("btn-ai-generate");
+    if (btnAiGenerate) {
+        btnAiGenerate.addEventListener("click", () => {
+            const inputTitle = document.getElementById("ai-input-title").value;
+            const inputName = document.getElementById("ai-input-name").value;
+
+            if (!inputTitle || !inputTitle.trim()) {
+                alert("Please enter a target job title (e.g. Python Backend Engineer, Marketing Manager).");
+                return;
+            }
+
+            const generatedData = generateCustomProfileData(inputTitle, inputName);
+            resumeData = generatedData;
+            populateForm();
+            syncState();
+            if (aiModalOverlay) aiModalOverlay.classList.remove("active");
+        });
+    }
 
     // Clear Screen
     document.getElementById("btn-clear").addEventListener("click", () => {
@@ -276,10 +710,29 @@ function initActionButtons() {
         const canvas = document.getElementById("resume-canvas");
         if (canvas) {
             canvas.style.transform = "none";
+            canvas.style.marginBottom = "0";
+            canvas.style.margin = "0 auto";
+        }
+        const viewport = document.querySelector(".canvas-viewport");
+        if (viewport) {
+            viewport.style.minHeight = "auto";
+            viewport.style.height = "auto";
+            viewport.style.padding = "0";
         }
     });
 
     window.addEventListener("afterprint", () => {
+        const canvas = document.getElementById("resume-canvas");
+        if (canvas) {
+            canvas.style.marginBottom = "";
+            canvas.style.margin = "";
+        }
+        const viewport = document.querySelector(".canvas-viewport");
+        if (viewport) {
+            viewport.style.minHeight = "";
+            viewport.style.height = "";
+            viewport.style.padding = "";
+        }
         window.dispatchEvent(new Event("resize"));
     });
 
@@ -640,12 +1093,16 @@ function renderDynamicListEditors(listKey) {
             formHtml = `
                 <div class="form-grid" style="padding-top:0;">
                     <div class="form-group col-span-2">
-                        <label>Certification / Qualification (Title & Issuing Board)</label>
-                        <input type="text" data-field="name" placeholder="E.g. HSC - Higher Secondary Certificate (Dhaka Board) or AWS Cloud Practitioner" value="${item.name || ''}">
+                        <label>Certification / Qualification Title</label>
+                        <input type="text" data-field="name" placeholder="E.g. AWS Cloud Practitioner or HSC - Higher Secondary Certificate" value="${item.name || ''}">
+                    </div>
+                    <div class="form-group col-span-2">
+                        <label>Issuing Organization / Company</label>
+                        <input type="text" data-field="issuer" placeholder="E.g. Amazon Web Services, Udemy, Coursera, Dhaka Board..." value="${item.issuer || ''}">
                     </div>
                     <div class="form-group col-span-2">
                         <label>Year / Date</label>
-                        <input type="text" data-field="date" placeholder="E.g. 2018" value="${item.date || ''}">
+                        <input type="text" data-field="date" placeholder="E.g. 2023 or Jan 2024" value="${item.date || ''}">
                     </div>
                 </div>
             `;
@@ -986,10 +1443,72 @@ function renderPreview() {
             ${extraGridHTML}
         </div>
     `;
-    
-    // Auto-adjust scale sizing rules on update
-    const scaledHeight = canvas.offsetHeight * zoomFactor;
-    document.querySelector(".canvas-viewport").style.minHeight = `${scaledHeight + 80}px`;
+
+    // Auto-fit to exactly 1 A4 page
+    requestAnimationFrame(() => {
+        autoFitToOnePage(canvas);
+
+        // Recalculate wrapper size after fit
+        const wrapper = document.getElementById("resume-canvas-wrapper");
+        if (wrapper && canvas) {
+            const scaleMatch = canvas.style.transform.match(/scale\(([^)]+)\)/);
+            const activeScale = scaleMatch ? parseFloat(scaleMatch[1]) : 1;
+            wrapper.style.width = (canvas.offsetWidth * activeScale) + "px";
+            wrapper.style.height = (canvas.offsetHeight * activeScale) + "px";
+        }
+    });
+}
+
+/**
+ * Automatically scales the CV content to fit within exactly 1 A4 page.
+ * Uses CSS `zoom` which scales ALL properties (text, padding, margin, gap)
+ * proportionally — unlike font-size which only affects text.
+ */
+function autoFitToOnePage(canvas) {
+    if (!canvas) return;
+
+    const content = canvas.querySelector(".resume-content-wrapper");
+    if (!content) return;
+
+    // Reset any previous zoom
+    content.style.zoom = "";
+
+    const pageH = canvas.clientHeight; // 297mm in pixels
+
+    // Measure total scroll height at natural (unscaled) size
+    const totalScrollH = canvas.scrollHeight;
+
+    // Already fits on 1 page — nothing to do
+    if (totalScrollH <= pageH + 2) {
+        canvas.classList.remove("page-overflow");
+        return;
+    }
+
+    // Measure how much height the canvas padding takes (top + bottom padding)
+    const contentNaturalH = content.getBoundingClientRect().height;
+    const paddingH = Math.max(0, totalScrollH - contentNaturalH);
+
+    // Target height available for content after subtracting padding
+    const targetContentH = pageH - paddingH;
+
+    if (targetContentH <= 10) {
+        // Padding alone is too large — can't auto-fit
+        canvas.classList.add("page-overflow");
+        return;
+    }
+
+    // Calculate exact zoom needed (floor to 2 decimal places, minimum 0.60)
+    const rawScale = targetContentH / contentNaturalH;
+    const appliedScale = Math.max(0.60, Math.floor(rawScale * 100) / 100);
+
+    content.style.zoom = appliedScale;
+
+    // Final overflow check after zoom is applied
+    if (canvas.scrollHeight > pageH + 4) {
+        canvas.classList.add("page-overflow");
+    } else {
+        canvas.classList.remove("page-overflow");
+    }
 }
 
 // Helper to escape HTML tags to avoid XSS inject vulnerabilities
